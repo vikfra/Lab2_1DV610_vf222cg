@@ -2,6 +2,12 @@
 
 
 class LayoutView {
+
+  private $manager;
+
+  public function __construct($manager) {
+    $this->manager = $manager;
+  }
   
   public function render($isLoggedIn, LoginView $v, DateTimeView $dtv) {
     echo '<!DOCTYPE html>
@@ -12,7 +18,7 @@ class LayoutView {
         </head>
         <body>
           <h1>Assignment 2</h1>
-          ' . $this->renderIsLoggedIn($isLoggedIn) . '
+          ' . $this->renderIsLoggedIn($this->manager->loggedIn) . '
           
           <div class="container">
               ' . $v->response() . '

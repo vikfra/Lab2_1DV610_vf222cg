@@ -9,9 +9,13 @@ class LoginView {
 	private static $cookiePassword = 'LoginView::CookiePassword';
 	private static $keep = 'LoginView::KeepMeLoggedIn';
 	private static $messageId = 'LoginView::Message';
+	private $manager;
 
+
+	public function __construct($manager) {
+		$this->manager = $manager;
+	}
 	
-
 	/**
 	 * Create HTTP response
 	 *
@@ -20,17 +24,12 @@ class LoginView {
 	 * @return  void BUT writes to standard output and cookies!
 	 */
 	public function response() {
-		$message = '';
-		
-		if(isset($_POST[self::$login])) {
-			if(empty($this->getRequestUserName())) {
-				$message = 'Username is missing';
-			} else if (empty($this->getRequestPassWord())) {
-				$message = 'Password is missing';
-			} 
+		$message = $this->manager->message;
+		if ($this->manager->loggedIn) {
+			$response = $this->generateLogoutButtonHTML($message);
+		} else {
+			$response = $this->generateLoginFormHTML($message);
 		}
-
-		$response = $this->generateLoginFormHTML($message);
 		//$response .= $this->generateLogoutButtonHTML($message);
 		return $response;
 	}
@@ -62,7 +61,7 @@ class LoginView {
 					<p id="' . self::$messageId . '">' . $message . '</p>
 					
 					<label for="' . self::$name . '">Username :</label>
-					<input type="text" id="' . self::$name . '" name="' . self::$name . '" value="" />
+					<input type="text" id="' . self::$name . '" name="' . self::$name . '" value="Admin" />
 
 					<label for="' . self::$password . '">Password :</label>
 					<input type="password" id="' . self::$password . '" name="' . self::$password . '" />
@@ -77,7 +76,7 @@ class LoginView {
 	}
 	
 	//CREATE GET-FUNCTIONS TO FETCH REQUEST VARIABLES
-	private function getRequestUserName() {
+	public function getRequestUserName() {
 		if(isset($_POST[self::$name])) {
 			return $_POST[self::$name];
 		} else {
@@ -86,12 +85,16 @@ class LoginView {
 	}
 
 
-	private function getRequestPassWord () {
+	public function getRequestPassWord () {
 		if(isset($_POST[self::$password])) {
 			return $_POST[self::$password];
 		} else {
 			return false;
 		}
 	}
-	
+
+	public function userHasLogIn () {
+		return isset($_POST[self::$login]);
+	}
+
 }

@@ -11,6 +11,8 @@ require_once('controller/LogInController.php');
 error_reporting(E_ALL);
 ini_set('display_errors', 'On');
 
+session_start();
+
 //CREATE OBJECTS OF THE VIEWS
 $dtv = new DateTimeView();
 $logInManager = new \model\LogInManager();

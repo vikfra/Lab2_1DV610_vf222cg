@@ -8,6 +8,7 @@
         public function authenticateLogIn($username, $password) {
             if ($username == 'Admin' && $password == 'Password') {
                 $this->loggedIn = true;
+                $_SESSION['loggedIn'] = true;
                 $this->message = 'Welcome';
             } else if ($username && $password) {
                 $this->message = 'Wrong name or password';

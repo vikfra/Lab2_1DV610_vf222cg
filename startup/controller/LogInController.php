@@ -18,6 +18,9 @@
             if ($this->view->userHasLogIn()) {
                 $validLogIn = $this->manager->validateLogIn($username, $password);
                 $authenticatedUser = $this->manager->authenticateLogIn($username, $password);
+            } else if ($this->view->userHasLogOut()) {
+                session_destroy();
+                header('Location: /');
             }
         }
     }

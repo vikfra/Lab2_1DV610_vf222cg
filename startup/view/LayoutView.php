@@ -18,7 +18,7 @@ class LayoutView {
         </head>
         <body>
           <h1>Assignment 2</h1>
-          ' . $this->renderIsLoggedIn($this->manager->loggedIn) . '
+          ' . $this->renderIsLoggedIn(isset($_SESSION['loggedIn'])) . '
           
           <div class="container">
               ' . $v->response() . '

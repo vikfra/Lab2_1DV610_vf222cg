@@ -25,7 +25,8 @@ class LoginView {
 	 */
 	public function response() {
 		$message = $this->manager->message;
-		if ($this->manager->loggedIn) {
+
+		if (isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == true) {
 			$response = $this->generateLogoutButtonHTML($message);
 		} else {
 			$response = $this->generateLoginFormHTML($message);
@@ -97,4 +98,7 @@ class LoginView {
 		return isset($_POST[self::$login]);
 	}
 
+	public function userHasLogOut () {
+		return isset($_POST[self::$logout]);
+	}
 }

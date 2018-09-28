@@ -6,6 +6,8 @@ require_once('view/DateTimeView.php');
 require_once('view/LayoutView.php');
 require_once('model/LogInManager.php');
 require_once('controller/LogInController.php');
+require_once('model/RegisterManager.php');
+require_once('view/RegisterView.php');
 
 //MAKE SURE ERRORS ARE SHOWN... MIGHT WANT TO TURN THIS OFF ON A PUBLIC SERVER
 error_reporting(E_ALL);
@@ -19,6 +21,7 @@ if(!isset($_SESSION['browser'])) {
     $_SESSION['browser'] = $_SERVER['HTTP_USER_AGENT'];
 } 
 
+
 //CREATE OBJECTS OF THE VIEWS
 $dtv = new DateTimeView();
 $logInManager = new \model\LogInManager();
@@ -27,5 +30,13 @@ $lv = new LayoutView($logInManager);
 $app = new \controller\LogInController($v, $lv, $logInManager);
 
 $app->initializeLogIn();
-$lv->render(false, $v, $dtv);
+
+
+if (isset($_GET['register'])) {
+    $registerManager = new \model\RegisterManager();
+    $rv = new RegisterView($registerManager);
+    $lv->render(false, $rv, $dtv);
+} else {
+    $lv->render(false, $v, $dtv);
+}
 

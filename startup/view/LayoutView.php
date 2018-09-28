@@ -9,7 +9,7 @@ class LayoutView {
     $this->manager = $manager;
   }
   
-  public function render($isLoggedIn, LoginView $v, DateTimeView $dtv) {
+  public function render($isLoggedIn, $v, DateTimeView $dtv) {
     echo '<!DOCTYPE html>
       <html>
         <head>
@@ -18,8 +18,7 @@ class LayoutView {
         </head>
         <body>
           <h1>Assignment 2</h1>
-          ' . $this->renderIsLoggedIn(isset($_SESSION['loggedIn'])) . '
-          
+          ' . $this->renderIsLoggedIn(isset($_SESSION['loggedIn']), $v) . '
           <div class="container">
               ' . $v->response() . '
               
@@ -30,12 +29,12 @@ class LayoutView {
     ';
   }
   
-  private function renderIsLoggedIn($isLoggedIn) {
+  private function renderIsLoggedIn($isLoggedIn, $v) {
     if ($isLoggedIn) {
       return '<h2>Logged in</h2>';
     }
     else {
-      return '<h2>Not logged in</h2>';
+      return $v->getButton() . '<h2>Not logged in</h2>';
     }
   }
 }

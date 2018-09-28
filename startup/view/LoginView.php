@@ -128,4 +128,8 @@ class LoginView {
 	public function userWillBeRemembered () {
 		return isset($_POST[self::$keep]);
 	}
+
+	public function getButton () {
+		return "<a href='?register'>Register a new user</a>";
+	}
 }

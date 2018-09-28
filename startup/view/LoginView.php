@@ -26,8 +26,23 @@ class LoginView {
 	public function response() {
 		$message = $this->manager->message;
 
-		if (isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == true) {
-			$response = $this->generateLogoutButtonHTML($message);
+		if (isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == true && $this->userHasLogOut() == false) {
+			if (!isset($_SESSION['refreshed'])) {
+				$response = $this->generateLogoutButtonHTML($message);
+			} else {
+				$message = '';
+				$response = $this->generateLogoutButtonHTML($message);
+			}
+			$_SESSION['refreshed'] = true;
+		} else if ($this->userHasLogOut() == true) {
+
+			if (!isset($_SESSION['logoutRefresh'])) {
+				$response = $this->generateLoginFormHTML($message);
+			} else {
+				$message = '';
+				$response = $this->generateLoginFormHTML($message);
+			}
+			$_SESSION['logoutRefresh'] = true;
 		} else {
 			$response = $this->generateLoginFormHTML($message);
 		}
@@ -62,7 +77,7 @@ class LoginView {
 					<p id="' . self::$messageId . '">' . $message . '</p>
 					
 					<label for="' . self::$name . '">Username :</label>
-					<input type="text" id="' . self::$name . '" name="' . self::$name . '" value="Admin" />
+					<input type="text" id="' . self::$name . '" name="' . self::$name . '" value="'. $this->getCookie() .'" />
 
 					<label for="' . self::$password . '">Password :</label>
 					<input type="password" id="' . self::$password . '" name="' . self::$password . '" />
@@ -100,5 +115,17 @@ class LoginView {
 
 	public function userHasLogOut () {
 		return isset($_POST[self::$logout]);
+	}
+
+	public function getCookie() {
+		if(isset($_COOKIE['username'])) {
+			return $_COOKIE['username'];
+		} else {
+			return "Admin";
+		}
+	}
+
+	public function userWillBeRemembered () {
+		return isset($_POST[self::$keep]);
 	}
 }
